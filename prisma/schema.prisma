@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Main {
+  id            Int       @id @default(autoincrement())
+  PENYULANG     String    @db.VarChar(15)
+  GI            String    @db.VarChar(15)
+  ULP           String    @db.VarChar(15)
+  UP3           String    @db.VarChar(15)
+  UID           String    @db.VarChar(15)
+  V_PANGKAL     Float
+  I_PANGKAL     Float
+  COSP_PANGKAL  Float
+  KW_PANGKAL    Float
+  TITIK_TENGAH  String    @db.VarChar(15)
+  V_TENGAH      Float
+  I_TENGAH      Float
+  COSP_TENGAH   Float
+  KW_TENGAH     Float
+  TITIK_UJUNG   String    @db.VarChar(15)
+  V_UJUNG       Float
+  I_UJUNG       Float
+  COSP_UJUNG    Float
+  KW_UJUNG      Float
+  GAP_KW        Float
+  GAP_PERSEN    Float
+  STATUS        String    @db.VarChar(15)
+  TIME          DateTime  @default(now()) @db.Timestamptz
+}
+
+model AuthUser {
+  id           String        @id @unique
+  email        String        @unique
+  name         String        @db.VarChar(100)
+  unit         String        @db.VarChar(15)
+  wilayah      String        @db.VarChar(15)   
+  auth_session AuthSession[]
+  auth_key     AuthKey[]
+
+  @@map("auth_user")
+}
+
+model AuthSession {
+  id             String   @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_session")
+}
+
+model AuthKey {
+  id              String   @id @unique
+  hashed_password String?
+  user_id         String
+  primary_key     Boolean
+  expires         BigInt?
+  auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_key")
+}
+
+model Unit{
+  id              Int      @id @default(autoincrement())
+  PENYULANG       String   @db.VarChar(15)
+  GI              String   @db.VarChar(15)
+  ULP             String   @db.VarChar(15)
+  UP3             String   @db.VarChar(15)
+  UID             String   @db.VarChar(15)   
+}

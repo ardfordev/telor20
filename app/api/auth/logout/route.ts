@@ -1,0 +1,14 @@
+import { auth } from "@/auth/lucia";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+
+export const POST = async (request: Request) => {
+	const authRequest = auth.handleRequest({ request, cookies });
+	const { session } = await authRequest.validateUser();
+	if (!session) {
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+	}
+	await auth.invalidateSession(session.sessionId);
+	authRequest.setSession(null);
+	return NextResponse.json({ message: "Behasil logout" }, { status: 200 });
+};
