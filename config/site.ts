@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "REINFORCE",
+  name: "TELOR.20",
   description:
-    "Realtime Input For Engineering Technical Losses To Improve Services..",
+    "TECHNICAL LOSSES REALTIME 20 KV",
   mainNav: [
     {
       title: "Dashboard",
